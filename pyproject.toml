@@ -1,0 +1,50 @@
+[project]
+name = "call-me-maybe"
+version = "1.0.0"
+description = "Function calling with constrained decoding for Qwen3-0.6B"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [
+    {name = "Gessica", login = "gpeixoto"},
+]
+license = {text = "MIT"}
+
+dependencies = [
+    "llm-sdk",
+    "numpy>=2.2.6",
+    "pydantic>=2.13.4",
+]
+
+[dependency-groups]
+dev = [
+    "flake8",
+    "mypy",
+]
+
+[tool.uv.workspace]
+members = [
+    "llm_sdk",
+]
+
+[tool.uv.sources]
+llm-sdk = { workspace = true }
+
+[tool.mypy]
+warn_return_any = true
+warn_unused_ignores = true
+ignore_missing_imports = true
+disallow_untyped_defs = true
+check_untyped_defs = true
+exclude = "^(llm_sdk)/"
+
+# The workspace member directory 'llm_sdk/' shadows the installed
+# package of the same name, so mypy resolves it as an empty namespace
+# package. Skipping it lets the real (installed) package's symbols
+# type as Any.
+[[tool.mypy.overrides]]
+module = "llm_sdk"
+follow_imports = "skip"
+
+[tool.flake8]
+max-line-length = 100
+exclude = ["llm_sdk", ".venv", "__pycache__", ".mypy_cache"]
